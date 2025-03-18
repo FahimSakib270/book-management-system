@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const cors = require("cors"); // Enable CORS
+const cors = require("cors");
 
 // Initialize the app
 const app = express();
@@ -9,11 +9,14 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(bodyParser.json());
-app.use(cors()); // Allow cross-origin requests
+app.use(cors());
 
 // Connect to MongoDB
 mongoose
-  .connect("mongodb://127.0.0.1:27017/bookdb")
+  .connect("mongodb://127.0.0.1:27017/bookdb", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Could not connect to MongoDB", err));
 
@@ -25,7 +28,6 @@ const bookSchema = new mongoose.Schema({
   price: Number,
   quantity: Number,
 });
-
 const Book = mongoose.model("Book", bookSchema);
 
 // Routes
@@ -72,7 +74,23 @@ app.put("/books/:id", async (req, res) => {
     const updatedBook = await Book.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
+    if (!updatedBook) {
+      return res.status(404).send("Book not found");
+    }
     res.send(updatedBook);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
+// Delete a book by ID
+app.delete("/books/:id", async (req, res) => {
+  try {
+    const deletedBook = await Book.findByIdAndDelete(req.params.id);
+    if (!deletedBook) {
+      return res.status(404).send("Book not found");
+    }
+    res.send(deletedBook);
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -85,6 +103,19 @@ app.get("/books/low-stock", async (req, res) => {
     res.json(books);
   } catch (error) {
     res.status(500).send(error.message);
+  }
+});
+
+// Get a single book by ID (for editing)
+app.get("/books/:id", async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    if (!book) {
+      return res.status(404).send("Book not found");
+    }
+    res.send(book);
+  } catch (error) {
+    res.status(400).send(error.message);
   }
 });
 

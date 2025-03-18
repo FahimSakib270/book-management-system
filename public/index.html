@@ -5,59 +5,131 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Book Management System</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Custom gradient background */
+      .gradient-bg {
+        background: linear-gradient(90deg, #6366f1, #818cf8);
+      }
+      /* Custom shadow for cards */
+      .custom-shadow {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+      }
+      .poppins-medium {
+        font-family: "Poppins", sans-serif;
+        font-weight: 500;
+        font-style: normal;
+      }
+    </style>
   </head>
-  <body class="bg-gray-100">
-    <div class="container mx-auto p-4">
-      <h1 class="text-3xl font-bold mb-10 text-center text-blue-500">
-        Book <span class="text-black">Management System</span>
-      </h1>
+  <body class="bg-gray-50 poppins-medium">
+    <div class="container mx-auto p-6">
+      <!-- Header -->
+      <header class="text-center mb-10">
+        <h1
+          class="text-5xl font-bold gradient-bg text-transparent bg-clip-text"
+        >
+          Book <span class="text-black">Management System</span>
+        </h1>
+      </header>
 
-      <!-- Add Book Form -->
-      <form id="addBookForm" class="mb-4">
-        <input
-          type="text"
-          id="title"
-          placeholder="Title"
-          required
-          class="border p-2 mr-2"
-        />
-        <input
-          type="text"
-          id="author"
-          placeholder="Author"
-          required
-          class="border p-2 mr-2"
-        />
-        <input
-          type="text"
-          id="publisher"
-          placeholder="Publisher"
-          required
-          class="border p-2 mr-2"
-        />
-        <input
-          type="number"
-          id="price"
-          placeholder="Price"
-          required
-          class="border p-2 mr-2"
-        />
-        <input
-          type="number"
-          id="quantity"
-          placeholder="Quantity"
-          required
-          class="border p-2 mr-2"
-        />
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+      <!-- Search Form -->
+      <div
+        class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg custom-shadow mb-8"
+      >
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Search Books</h2>
+        <div class="flex space-x-4">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Enter title or author"
+            class="border border-gray-300 p-3 rounded focus:outline-none focus:border-blue-500 flex-grow transition duration-300"
+          />
+          <button
+            onclick="searchBooks()"
+            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+
+      <!-- Low Stock Button -->
+      <div class="max-w-3xl mx-auto mb-8 text-center">
+        <button
+          onclick="fetchLowStockBooks()"
+          class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-green-600 transition duration-300"
+        >
+          Show Low Stock Books
+        </button>
+      </div>
+
+      <!-- Add/Edit Book Form -->
+      <form
+        id="bookForm"
+        class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg custom-shadow mb-8"
+      >
+        <h2
+          class="text-2xl font-semibold text-gray-800 mb-4 text-center"
+          id="formTitle"
+        >
+          Add a New Book
+        </h2>
+        <input type="hidden" id="bookId" />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            type="text"
+            id="title"
+            placeholder="Title"
+            required
+            class="border border-gray-300 p-3 rounded focus:outline-none focus:border-blue-500 transition duration-300"
+          />
+          <input
+            type="text"
+            id="author"
+            placeholder="Author"
+            required
+            class="border border-gray-300 p-3 rounded focus:outline-none focus:border-blue-500 transition duration-300"
+          />
+          <input
+            type="text"
+            id="publisher"
+            placeholder="Publisher"
+            required
+            class="border border-gray-300 p-3 rounded focus:outline-none focus:border-blue-500 transition duration-300"
+          />
+          <input
+            type="number"
+            id="price"
+            placeholder="Price"
+            required
+            class="border border-gray-300 p-3 rounded focus:outline-none focus:border-blue-500 transition duration-300"
+          />
+          <input
+            type="number"
+            id="quantity"
+            placeholder="Quantity"
+            required
+            class="border text-center border-gray-300 p-3 rounded focus:outline-none focus:border-blue-500 transition duration-300 w-full col-span-2"
+          />
+        </div>
+        <button
+          type="submit"
+          class="mt-6 w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition duration-300"
+          id="submitButton"
+        >
           Add Book
         </button>
       </form>
 
       <!-- Display Books -->
-      <div id="bookList" class="space-y-2"></div>
+      <div id="bookList" class="space-y-6"></div>
     </div>
-
     <script src="script.js"></script>
   </body>
 </html>
